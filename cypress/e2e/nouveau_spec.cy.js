@@ -1,7 +1,9 @@
-describe('test counter', () => {
+describe('test calc et counter', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5173/')
   })
+
+  //Test Counter
   it('le compteur est a 0',() => {
     cy.get('#counter').contains('count is 0')
   })
@@ -24,5 +26,53 @@ describe('test counter', () => {
       .should('have.attr', 'href')
     cy.get('img')
       .should('have.attr', 'src')
+  })
+
+  //Test Calculatrice
+  it('Peut additionner 2 nombres positifs',() => {
+    cy.get('#firstNumber').type('1')
+    cy.get('#secondNumber').type('1')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('2')
+  })
+  it('Peut additionner 2 nombres négatifs',() =>{
+    cy.get('#firstNumber').type('-1')
+    cy.get('#secondNumber').type('-1')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('-2')
+  })
+  it('Peut additionner 1 nombre positif et un négatif',() => {
+    cy.get('#firstNumber').type('1')
+    cy.get('#secondNumber').type('-1')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('0')
+  })
+  it('Peut additionner 2 nombres à virgule',() => {
+    cy.get('#firstNumber').type('1.5')
+    cy.get('#secondNumber').type('1.5')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('3')
+  })
+  it('Peut additionner 2 nombres négatifs à virgule',() => {
+    cy.get('#firstNumber').type('-1.5')
+    cy.get('#secondNumber').type('-1.5')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('-3')
+  })
+  it('Peut additionner 2 grand nombres',() => {
+    cy.get('#firstNumber').type('123456789')
+    cy.get('#secondNumber').type('123456789')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('246913578')
+  })
+  it('Peut additionner 2 grand nombres negatifs',() => {
+    cy.get('#firstNumber').type('-123456789')
+    cy.get('#secondNumber').type('-123456789')
+    cy.get('#calculBtn').click()
+    cy.get('#result').contains('-246913578')
+  })
+  it('Gère les champs vides',() => { //erreur: Affiche NaN
+    cy.get('#calculBtn').click()
+    cy.get('#result').should('be.empty')
   })
 })
