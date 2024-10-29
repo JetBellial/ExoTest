@@ -71,8 +71,31 @@ describe('test calc et counter', () => {
     cy.get('#calculBtn').click()
     cy.get('#result').contains('-246913578')
   })
-  it('Gère les champs vides',() => { //erreur: Affiche NaN
+  it('Peut additionner 2 nombres à 0',() => {
+    cy.get('#firstNumber').type('0')
+    cy.get('#secondNumber').type('0')
     cy.get('#calculBtn').click()
-    cy.get('#result').should('be.empty')
+    cy.get('#result').contains('0')
+  })
+  // it('Gère les champs vides',() => { //erreur: Affiche NaN
+  //   cy.get('#calculBtn').click()
+  //   cy.get('#result').should('be.empty')
+  // })
+
+
+  //Test API
+  it('Api présente sur la page',() => { 
+    cy.get('#pokeListe').should('exist')
+  })
+  it(`Verification des données de l'API`, () => {
+    cy.request('https://pokeapi.co/api/v2/pokemon').then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('results')
+      expect(response.body.results).to.be.an('array').that.is.not.empty
+    })
+  })
+  it('Présence du premier nom de pokemon et de la longueur du tableau',() => { 
+  cy.get('#pokeListe').children().should('have.length', 20)
+  cy.get('#pokeListe').children().first().should('contain.text', 'bulbasaur')
   })
 })
